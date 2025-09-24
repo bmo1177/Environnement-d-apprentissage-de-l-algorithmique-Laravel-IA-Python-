@@ -1,0 +1,27 @@
+{
+  "clusters": [
+    {
+      "cluster_id": 0,
+      "size": 2,
+      "centroid": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "characteristics": {
+        "cognitive": "Average cognitive performance",
+        "behavioral": "Moderate engagement",
+        "motivational": "Average motivation",
+        "recommendation": "Continue with current pace"
+      },
+      "avg_cognitive": 50.0,
+      "avg_behavioral": 50.0,
+      "avg_motivational": 50.0
+    }
+  ],
+  "timestamp": "2025-09-24T03:28:47",
+  "n_samples": 2
+}
