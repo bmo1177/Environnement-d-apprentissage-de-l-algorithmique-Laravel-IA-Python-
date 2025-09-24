@@ -84,7 +84,7 @@ learner-env/
 ![Student Challenge page](screenschots/screencapture-localhost-8080-student-challenge-1-2025-09-24-04_13_24.png)
 ![Student Profile page](screenschots/screencapture-localhost-8080-student-profile-2025-09-24-04_41_05.png)
 ![Teacher Dashboard page](screenschots/screencapture-localhost-8080-teacher-dashboard-2025-09-24-04_45_58.png)
-![Teacher Clustering page](docs/screenshots/teacher-dashboard.png) - [] - Not finished
+![Teacher Clustering page](screenschots/screencapture-localhost-8080-teacher-dashboard-2025-09-24-04_50_32.png) - [] - Not finished
 ![Teacher Students Management page](screenschots/screencapture-localhost-8080-teacher-students-2025-09-24-04_46_28.png)
 ![Admin Dashboard page](screenschots/screencapture-localhost-8080-admin-dashboard-2025-09-24-04_55_44.png)
 
