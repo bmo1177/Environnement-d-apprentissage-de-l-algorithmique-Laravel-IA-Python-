@@ -1,253 +1,344 @@
 # Learner Environment Platform
 
-A comprehensive PHP-based learning platform built with Laravel that provides an interactive environment for students to solve coding challenges, receive AI-powered feedback, and for teachers to track student progress through advanced clustering and analytics.
+An adaptive algorithmic learning environment combining Laravel backend with FastAPI AI microservices for code evaluation, student clustering, and personalized recommendations.
 
-## Features
+## Architecture Overview
+
+- **Frontend**: Laravel web application with Blade templates
+- **Backend**: PHP 8.2+ with MySQL database
+- **AI Services**: FastAPI microservice for code evaluation and machine learning
+- **Containerization**: Docker Compose for development environment
+
+## Quick Access Links
+
+- **Main Application**: http://localhost:8080
+- **AI Microservice**: http://localhost:8000 (internal), http://python_service:8000 (container network)
+- **Database Admin**: http://localhost:8081 (Adminer)
+
+## Core Features
 
 ### For Students
-- Interactive coding challenges with real-time feedback
-- Personalized learning paths based on performance
-- AI-powered recommendations for improvement
-- Progress tracking and achievement system
+- Interactive coding challenges with starter templates
+- Real-time code evaluation and testing
+- AI-powered feedback and personalized hints
+- Progress tracking and competency mapping
+- Adaptive difficulty adjustment
 
 ### For Teachers
 - Student performance analytics dashboard
-- AI-driven clustering of students by learning patterns
+- AI-driven clustering of learning patterns
 - Challenge creation and management tools
-- Detailed insights into student learning behaviors
+- Detailed attempt analysis and reporting
 
 ### For Administrators
-- User management and role-based access control
-- Security scanning and vulnerability detection
-- System performance monitoring
-- Configuration management
+- User and role management
+- System monitoring and health checks
+- Database seeding and maintenance tools
 
-## Technical Architecture
+## Project Structure
 
-### MVC Structure
-The application follows the Model-View-Controller (MVC) architecture pattern with PSR-4 compliant namespaces:
+```
+learner-env/
+├── app/                    # Laravel application logic
+│   ├── Http/Controllers/   # Web controllers
+│   └── Models/            # Eloquent models
+├── database/
+│   ├── migrations/        # Database schema
+│   └── seeders/          # Demo data generation
+├── resources/views/       # Blade templates
+├── python_service/        # AI microservice
+│   ├── main.py           # FastAPI application
+│   ├── evaluator.py      # Code evaluation service
+│   ├── cluster.py        # Student clustering service
+│   ├── profile.py        # Learner profile management
+│   ├── expert_rules.py   # Expert system rules
+│   └── requirements.txt  # Python dependencies
+├── docker/               # Docker configuration
+├── docker-compose.yml    # Container orchestration
+└── Dockerfile           # PHP-FPM container
+```
 
-- **Models**: Database entities and relationships
-- **Views**: Blade templates for UI rendering
-- **Controllers**: Request handling and business logic coordination
-- **Services**: Business logic implementation and separation of concerns
+## System Requirements
 
-### Key Components
+### Docker Development (Recommended)
+- Docker Engine 20.10+
+- Docker Compose 2.0+
+- 4GB+ available RAM
+- WSL2 (Windows users)
 
-#### Service Layer
-- **ChallengeService**: Manages challenge-related operations
-- **UserService**: Handles user-related business logic
-- **CacheService**: Optimizes performance through strategic caching
-- **SecurityScanner**: Detects code vulnerabilities and security issues
-- **PDOWrapper**: Provides secure database operations
+### Local Development
+- PHP 8.2+
+- Composer 2.0+
+- MySQL 8.0+
+- Node.js 18+
+- Python 3.10+
 
-#### Security Features
-- Enhanced CSRF protection with security headers
-- SQL injection prevention through prepared statements
-- Automated security scanning for vulnerability detection
-- Role-based access control
+## Screenshots of the project:
 
-#### Performance Optimization
-- Strategic caching with group-based invalidation
-- Database query optimization
-- Asset bundling and compression
+![Home page](/screenschots/screencapture-localhost-8080-2025-09-24-03_41_59.png)
+![Login page](screenschots/screencapture-localhost-8080-login-2025-09-24-03_43_18.png)
+![Password reset page](screenschots/screencapture-localhost-8080-password-reset-2025-09-24-03_50_59.png)
+![Register page](screenschots/screencapture-localhost-8080-register-2025-09-24-03_57_21.png)
+![Student Challenges page](screenschots/screencapture-localhost-8080-student-challenges-2025-09-24-04_13_00.png)
+![Student Home page](screenschots/screencapture-localhost-8080-student-dashboard-2025-09-24-04_05_02.png)
+![Student Challenge page](screenschots/screencapture-localhost-8080-student-challenge-1-2025-09-24-04_13_24.png)
+![Student Profile page](screenschots/screencapture-localhost-8080-student-profile-2025-09-24-04_41_05.png)
+![Teacher Dashboard page](screenschots/screencapture-localhost-8080-teacher-dashboard-2025-09-24-04_45_58.png)
+![Teacher Clustering page](docs/screenshots/teacher-dashboard.png) - [] - Not finished
+![Teacher Students Management page](screenschots/screencapture-localhost-8080-teacher-students-2025-09-24-04_46_28.png)
+![Admin Dashboard page](screenschots/screencapture-localhost-8080-admin-dashboard-2025-09-24-04_55_44.png)
 
-#### AI Integration
-- Python-based clustering service for student grouping
-- Recommendation engine for personalized learning
-- Automated feedback generation
 
-## Installation
+## Installation Guide
 
-### Prerequisites
-- PHP 8.1 or higher
-- Composer
-- MySQL 8.0 or higher
-- Node.js and NPM
-- Python 3.8 or higher (for AI services)
+### Docker Setup (Recommended)
 
-### Setup Instructions
-
-1. Clone the repository:
+1. **Clone and configure environment**:
    ```bash
-   git clone https://github.com/your-organization/learner-env.git
+   git clone <repository-url>
    cd learner-env
+   cp .env.example .env
    ```
 
-2. Install PHP dependencies:
+2. **Build and start containers**:
+   ```bash
+   docker compose up -d --build
+   ```
+
+3. **Verify container health**:
+   ```bash
+   docker compose ps
+   docker logs learner-python
+   docker logs learner-php
+   ```
+
+4. **Initialize database**:
+   ```bash
+   docker exec -it learner-php bash
+   php artisan migrate:fresh --seed
+   php artisan key:generate
+   exit
+   ```
+
+### Local Development Setup
+
+1. **Install PHP dependencies**:
    ```bash
    composer install
    ```
 
-3. Install JavaScript dependencies:
+2. **Install Node.js dependencies**:
    ```bash
-   npm install
+   npm install && npm run dev
    ```
 
-4. Copy the environment file and configure your settings:
-   ```bash
-   cp .env.example .env
-   ```
-
-5. Generate application key:
+3. **Configure database and generate keys**:
    ```bash
    php artisan key:generate
+   php artisan migrate:fresh --seed
    ```
 
-6. Run database migrations and seed initial data:
+4. **Start Laravel development server**:
    ```bash
-   php artisan migrate --seed
+   php artisan serve --host=127.0.0.1 --port=8080
    ```
 
-7. Build frontend assets:
-   ```bash
-   npm run dev
-   ```
-
-8. Start the development server:
-   ```bash
-   php artisan serve
-   ```
-
-9. Set up the Python service (for AI features):
+5. **Start Python AI service**:
    ```bash
    cd python_service
+   python -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
    pip install -r requirements.txt
-   python app.py
+   uvicorn main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
-### Docker Setup
+## AI Service Testing
 
-Alternatively, you can use Docker for a containerized setup:
-
+### Health Check
 ```bash
-docker-compose up -d
+# From host
+curl http://localhost:8000/health
+
+# From container
+docker exec -it learner-php bash
+curl http://python_service:8000/health
 ```
 
-This will start the following services:
-- Web server (Nginx)
-- PHP-FPM
-- MySQL database
-- Python service for AI features
+### Clustering Service Test
+```bash
+# Basic clustering test
+curl -X POST http://localhost:8000/cluster \
+  -H "Content-Type: application/json" \
+  -d '{"min_clusters":3,"max_clusters":6}'
 
-## Usage
-
-### Default User Accounts
-
-After seeding the database, the following accounts are available:
-
-- **Admin**:
-  - Email: admin@learner.com
-  - Password: password
-
-- **Teacher**:
-  - Email: teacher@learner.com
-  - Password: password
-
-- **Student**:
-  - Email: student@learner.com
-  - Password: password
-
-### Key URLs
-
-- **Main Application**: http://localhost:8000
-- **Admin Dashboard**: http://localhost:8000/admin/dashboard
-- **Teacher Dashboard**: http://localhost:8000/teacher/dashboard
-- **Student Dashboard**: http://localhost:8000/student/dashboard
-
-## Development
-
-### Directory Structure
-
-```
-learner-env/
-├─ app/
-│  ├─ Http/
-│  │  ├─ Controllers/
-│  │  │  ├─ Auth
-│  │  │  ├─ StudentController.php
-│  │  │  ├─ TeacherController.php
-│  │  │  ├─ AdminController.php
-│  │  │  ├─ ChallengeController.php
-│  │  │  ├─ CompetencyController.php
-│  │  │  ├─ UserController.php
-│  │  │  └─ HeatmapController.php
-│  │  └─ Middleware/RoleMiddleware.php
-│  ├─ Models/
-│  │  ├─ User.php
-│  │  ├─ LearnerProfile.php
-│  │  ├─ Competency.php
-│  │  ├─ Challenge.php
-│  │  ├─ Attempt.php
-│  │  └─ HeatmapLine.php
-├─ database/
-│  ├─ migrations/
-│  └─ seeders/
-├─ resources/views/
-│  ├─ layouts/app.blade.php
-│  ├─ student/
-│  ├─ teacher/
-│  ├─ admin/
-│  └─ challenges/
-├─ routes/web.php
-├─ python_service/
-│  ├─ app.py
-│  ├─ evaluator.py
-│  ├─ profile.py
-│  ├─ cluster.py
-│  ├─ expert_rules.py
-│  └─ requirements.txt
-└─ docker-compose.yml
+# Custom feature data test
+curl -X POST http://localhost:8000/cluster \
+  -H "Content-Type: application/json" \
+  -d '{
+    "min_clusters":2,
+    "max_clusters":4,
+    "feature_data":[
+      {"cognitive_score":80,"behavioral_score":60,"motivational_score":70},
+      {"cognitive_score":90,"behavioral_score":85,"motivational_score":95}
+    ]
+  }'
 ```
 
-### Adding New Features
+### Code Evaluation Test
+```bash
+curl -X POST http://localhost:8000/evaluate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code":"def add(a,b): return a+b",
+    "test_cases":[
+      {"input":{"a":2,"b":3},"output":5},
+      {"input":{"a":10,"b":5},"output":15}
+    ]
+  }'
+```
 
-1. Create necessary migrations for database changes
-2. Implement models with appropriate relationships
-3. Create or update service classes for business logic
-4. Implement controller methods for request handling
-5. Create or update views for UI components
-6. Add routes to make the feature accessible
-7. Write tests to ensure functionality
+## Troubleshooting Common Issues
 
-## Security
+### Container Communication Problems
 
-The application includes several security features:
+**Diagnosis**: Container cannot reach Python service
 
-- **PDOWrapper**: Prevents SQL injection through parameterized queries
-- **EnhancedCsrfProtection**: Provides CSRF protection with additional security headers
-- **SecurityScanner**: Detects common vulnerabilities in the codebase
-- **Role-based Access Control**: Restricts access based on user roles
+**Solution**: Verify service names in docker-compose.yml match your requests:
+```bash
+# From PHP container, use service name
+curl http://python_service:8000/health
 
-To run a security scan:
+# From host, use mapped port
+curl http://localhost:8000/health
+```
 
-1. Log in as an administrator
-2. Navigate to Security Dashboard
-3. Click "Run Security Scan"
+### PHP Version Compatibility
+
+**Diagnosis**: Composer platform check fails with "PHP >= 8.2.0 required"
+
+**Solution**: Update Dockerfile base image:
+```dockerfile
+FROM php:8.4-fpm
+```
+
+### Database Seeding Conflicts
+
+**Diagnosis**: Duplicate entry errors during seeding
+
+**Solution**: Fresh migration with seed data:
+```bash
+php artisan migrate:fresh --seed
+```
+
+### Broadcasting Error in Clustering
+
+**Diagnosis**: NumPy shape mismatch in clustering service
+
+**Solution**: The updated cluster.py handles dimensional validation automatically. Ensure feature_data arrays have consistent structure:
+```json
+{
+  "feature_data": [
+    {"cognitive_score": 75, "behavioral_score": 65, "motivational_score": 80},
+    {"cognitive_score": 85, "behavioral_score": 75, "motivational_score": 90}
+  ]
+}
+```
+
+### View Template Missing
+
+**Diagnosis**: Blade view not found error
+
+**Solution**: Ensure view files match route names:
+- Route: `teacher.clusters` → File: `resources/views/teacher/clusters.blade.php`
+
+## Demo Accounts
+
+After running seeders, these accounts are available:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@learner.com | password |
+| Teacher | teacher@learner.com | password |
+| Student | alice@learner.com | password |
 
 ## Performance Optimization
 
-The application uses several strategies for performance optimization:
+### Development Environment
+- Disable Xdebug when not debugging
+- Use optimized autoloader: `composer dump-autoload -o`
+- Clear configuration cache: `php artisan config:clear`
+- Enable PHP OPcache in production
 
-- **CacheService**: Provides a unified interface for caching with group-based invalidation
-- **Database Indexing**: Key fields are indexed for faster queries
-- **Asset Bundling**: Frontend assets are bundled and minified
+### Docker on Windows
+- Use WSL2 for better filesystem performance
+- Consider named volumes for `vendor/` and `node_modules/`
+- Use `:cached` or `:delegated` mount options for large directories
 
-## Contributing
+## AI Service Architecture
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit your changes: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature-name`
-5. Submit a pull request
+The Python microservice provides four main endpoints:
+
+1. **`/evaluate`**: Secure code execution with test case validation
+2. **`/cluster`**: Student grouping based on performance patterns
+3. **`/update_profile`**: Learner behavior and competency tracking
+4. **`/recommend`**: Personalized feedback generation
+
+### Service Health Monitoring
+```bash
+# Detailed health check
+curl http://localhost:8000/health
+
+# Service statistics
+curl http://localhost:8000/stats
+```
+
+## Development Workflow
+
+### Feature Development
+1. Create feature branch: `git checkout -b feature/improvement-name`
+2. Implement changes with tests
+3. Verify container functionality
+4. Submit pull request
+
+### Testing Checklist
+- [x] Container services start successfully
+- [x] Database migrations execute cleanly
+- [x] Python service health checks pass
+- [x] Web interface loads without errors
+- [ ] AI endpoints respond correctly
+
+## Contributing Guidelines
+
+- Keep changes focused and well-documented
+- Include test cases for new functionality
+- Follow PSR-12 coding standards for PHP
+- Use type hints in Python code
+- Update documentation for API changes
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is released under the MIT License. See LICENSE file for details.
 
-## Acknowledgments
+---
 
-- Laravel Framework
-- Bootstrap for UI components
-- Chart.js for data visualization
-- scikit-learn for machine learning algorithms
+## Quick Reference Commands
+
+```bash
+# Start development environment
+docker compose up -d
+
+# Reset database with fresh data
+docker exec -it learner-php php artisan migrate:fresh --seed
+
+# View service logs
+docker logs learner-python -f
+
+# Execute commands in PHP container
+docker exec -it learner-php bash
+
+# Test AI service connectivity
+curl -v http://localhost:8000/health
+
+# Stop all services
+docker compose down
+```
